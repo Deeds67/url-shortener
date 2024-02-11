@@ -1,9 +1,9 @@
 package pierremarais.functional
 
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.Test
-import pierremarais.urlshortener.Base58Strategy
-import pierremarais.urlshortener.InMemoryShortenedURLRepository
-import pierremarais.urlshortener.ShorteningServiceImpl
+import pierremarais.urlshortener.*
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
@@ -66,5 +66,20 @@ class ShorteningServiceTest {
         assertEquals(shortURL1, shortURL2)
         assertTrue { result1.created }
         assertFalse { result2.created }
+    }
+
+    @Test
+    fun `should fail if after retrying the maximum amount of times, it cannot generate a short url that does not conflict`() {
+        // Given
+        val repository = mockk<ShortenedURLRepository>()
+        val shorteningService = ShorteningServiceImpl(strategy, repository, maxRetries = 1)
+        val url = "https://www.google.com"
+
+        every { repository.findByOriginalURL(any()) } returns ShortenedURL("https://www.google.com", "shortened")
+        // When
+        val result = runCatching { shorteningService.shorten(url) }
+        println(result)
+        // Then
+        assert(result.isFailure)
     }
 }
