@@ -6,7 +6,8 @@ interface ShorteningService {
     fun getOriginalURL(shortURL: String): String?
 }
 
-class ShorteningServiceImpl(private val shorteningStrategy: ShorteningStrategy): ShorteningService {
+class ShorteningServiceImpl(private val shorteningStrategy: ShorteningStrategy,
+                            private val repository: ShortenedURLRepository,): ShorteningService {
     override fun shorten(url: String): ShortenResult {
         throw Exception("Not implemented")
     }
