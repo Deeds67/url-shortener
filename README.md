@@ -1,6 +1,6 @@
 # URL Shortener by Pierre Marais
 
-This is a simple URL shortener that hashes URLs using MD5, then encodes the hash to base58. The encoded string is reduced to max 8 characters.
+This is a simple URL shortener that hashes URLs using MD5, then encodes the hash with base58. The encoded string is reduced to max 8 characters.
 
 ## Usage
 
@@ -15,10 +15,10 @@ make test
 ```
 
 ### API documentation
-```bash
-make run
-```
-Then navigate to [http://localhost:8080/openapi](http://localhost:8080/openapi)
+
+The api is described in `src/main/resources/openapi/documentation.yaml`.
+
+It can be viewed in a browser by running the app and navigating to [http://localhost:8080/openapi](http://localhost:8080/openapi)
 
 ## Approach explained
 
@@ -40,5 +40,15 @@ There are 3 types of tests:
 ## Monitoring
 
 * The app exposes Dropwizard metrics in log format (latency percentiles, http status code counts, etc). These can be collected by a log aggregator such as ELK and used to create dashboards and configure alerting.
-  
- 
+
+
+### Example usage
+
+```bash
+curl -XPUT "http://localhost:8080/shortened-urls" -H "Content-Type: application/json" -d '{"url": "https://www.google.com"}'
+```
+
+Response:
+```json
+{ "short_url" : "http://localhost:8080/iMhpsFwa" }
+```
