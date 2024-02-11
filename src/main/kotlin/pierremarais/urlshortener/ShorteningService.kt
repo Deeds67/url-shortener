@@ -11,7 +11,20 @@ class ShorteningServiceImpl(private val shorteningStrategy: ShorteningStrategy,
                             private val maxRetries: Int = 5): ShorteningService {
     override fun shorten(url: String): ShortenResult {
         repository.findByOriginalURL(url)?.let { return ShortenResult(it.shortURL, created = false) }
-        return ShortenResult(shorteningStrategy.shorten(url), created = true)
+
+        var shortenedURL = shorteningStrategy.shorten(url)
+
+        repeat(maxRetries) { retry ->
+            val uniqueIdentifier = System.currentTimeMillis().toString() + retry
+
+            if (repository.findByShortenedURL(shortenedURL) == null) {
+                repository.save(ShortenedURL(url, shortenedURL))
+                return@shorten ShortenResult(shortenedURL, created = true)
+            }
+            shortenedURL = shorteningStrategy.shorten(url + uniqueIdentifier)
+        }
+
+        throw Exception("Failed to generate a unique shortened URL after $maxRetries retries.")
     }
 
     override fun getOriginalURL(shortURL: String): String? {

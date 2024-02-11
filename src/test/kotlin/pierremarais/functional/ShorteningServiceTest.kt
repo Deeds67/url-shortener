@@ -75,10 +75,11 @@ class ShorteningServiceTest {
         val shorteningService = ShorteningServiceImpl(strategy, repository, maxRetries = 1)
         val url = "https://www.google.com"
 
-        every { repository.findByOriginalURL(any()) } returns ShortenedURL("https://www.google.com", "shortened")
+        every { repository.findByOriginalURL(any()) } returns null
+        every { repository.findByShortenedURL(any()) } returns ShortenedURL("https://www.google.com", "shortened")
+
         // When
         val result = runCatching { shorteningService.shorten(url) }
-        println(result)
         // Then
         assert(result.isFailure)
     }
