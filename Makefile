@@ -1,3 +1,10 @@
+test:
+	docker compose up -d --wait
+	./gradlew flywayMigrate
+	./gradlew clean test
+	docker compose down
+
 run:
-	./gradlew flywayMigrate \
-    ./gradlew run
+	docker compose up -d --wait
+	./gradlew flywayMigrate
+	./gradlew run
