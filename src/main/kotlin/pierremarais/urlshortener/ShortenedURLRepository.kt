@@ -1,10 +1,7 @@
 package pierremarais.urlshortener
 
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.concurrent.ConcurrentHashMap
 
@@ -43,6 +40,12 @@ class PostgresShortenedURLRepository(dbConfig: pierremarais.DatabaseConfig) : Sh
     init {
         val url = "jdbc:postgresql://${dbConfig.host}:${dbConfig.port}/${dbConfig.database}"
         Database.connect(url, user = dbConfig.user, password = dbConfig.password)
+    }
+
+    fun clear() {
+        transaction {
+            ShortenedURLTable.deleteAll()
+        }
     }
 
     override fun save(shortenedURL: ShortenedURL) {
