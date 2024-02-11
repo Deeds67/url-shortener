@@ -19,6 +19,7 @@ class ApplicationTest {
         val repo = PostgresShortenedURLRepository(config.database)
         repo.clear()
     }
+
     @Test
     fun `PUT shortened-urls returns a short_url response 201 Created and 200 OK when repeated`() = testApplication {
         // Given
@@ -65,7 +66,10 @@ class ApplicationTest {
         val redirectException = assertFailsWith<InvalidTestRequestException> {
             client.get("eb7fbVee")
         }
-        assertEquals("Can not resolve request to http://google.com. Main app runs at localhost:80, localhost:443 and external services are ", redirectException.message)
+        assertEquals(
+            "Can not resolve request to http://google.com. Main app runs at localhost:80, localhost:443 and external services are ",
+            redirectException.message
+        )
     }
 
     @Test

@@ -36,7 +36,8 @@ class Base58ShorteningStrategyTest {
     fun `shorten should return a different shortened string for different urls`() {
         // Given
         val url1 = "https://www.google.com/234982394087293847293472938472938472938472389472938472938472983423423423"
-        val url2 = "https://www.google.com/aaaaaaaaaaaaasssssssssssssssddddddddddddddddddddffffffffffffffffffffffffffffffffffff"
+        val url2 =
+            "https://www.google.com/aaaaaaaaaaaaasssssssssssssssddddddddddddddddddddffffffffffffffffffffffffffffffffffff"
         // When
         val result = base58Shortening.shorten(url1)
         val result2 = base58Shortening.shorten(url2)

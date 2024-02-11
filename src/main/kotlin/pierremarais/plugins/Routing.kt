@@ -17,13 +17,14 @@ fun Application.configureRouting(shorteningService: ShorteningService, baseURL: 
     }
     install(StatusPages) {
         exception<Throwable> { call, cause ->
-            call.respondText(text = "500: $cause" , status = HttpStatusCode.InternalServerError)
+            call.respondText(text = "500: $cause", status = HttpStatusCode.InternalServerError)
         }
     }
     routing {
-        put("/shortened-urls"){
+        put("/shortened-urls") {
             data class ShorteningRequest(@JsonProperty("url") val url: String)
             data class ShorteningResponse(@JsonProperty("short_url") val shortUrl: String)
+
             val body = call.receive<ShorteningRequest>()
             val result = shorteningService.shorten(body.url)
             val shortURLWithPrefix = baseURL + result.shortURL
@@ -34,7 +35,7 @@ fun Application.configureRouting(shorteningService: ShorteningService, baseURL: 
             call.respond(ShorteningResponse(shortURLWithPrefix))
         }
 
-        get("/{short-url}"){
+        get("/{short-url}") {
             val shortURL = call.parameters["short-url"] ?: throw IllegalArgumentException("Missing short-url parameter")
             val originalURL = shorteningService.getOriginalURL(shortURL)
             if (originalURL != null) {

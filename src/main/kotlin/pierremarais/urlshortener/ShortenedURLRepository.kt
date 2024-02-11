@@ -1,7 +1,6 @@
 package pierremarais.urlshortener
 
 import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.concurrent.ConcurrentHashMap
 
@@ -59,15 +58,17 @@ class PostgresShortenedURLRepository(dbConfig: pierremarais.DatabaseConfig) : Sh
 
     override fun findByShortenedURL(shortURL: String): ShortenedURL? =
         transaction {
-            ShortenedURLTable.select(ShortenedURLTable.originalURL).where { ShortenedURLTable.shortURL eq shortURL }.map {
-                ShortenedURL(it[ShortenedURLTable.originalURL], shortURL)
-            }.firstOrNull()
+            ShortenedURLTable.select(ShortenedURLTable.originalURL).where { ShortenedURLTable.shortURL eq shortURL }
+                .map {
+                    ShortenedURL(it[ShortenedURLTable.originalURL], shortURL)
+                }.firstOrNull()
         }
 
     override fun findByOriginalURL(originalURL: String): ShortenedURL? =
         transaction {
-            ShortenedURLTable.select(ShortenedURLTable.shortURL).where { ShortenedURLTable.originalURL eq originalURL }.map {
-                ShortenedURL(originalURL, it[ShortenedURLTable.shortURL])
-            }.firstOrNull()
+            ShortenedURLTable.select(ShortenedURLTable.shortURL).where { ShortenedURLTable.originalURL eq originalURL }
+                .map {
+                    ShortenedURL(originalURL, it[ShortenedURLTable.shortURL])
+                }.firstOrNull()
         }
 }
