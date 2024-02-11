@@ -67,4 +67,15 @@ class ApplicationTest {
         }
         assertEquals("Can not resolve request to http://google.com. Main app runs at localhost:80, localhost:443 and external services are ", redirectException.message)
     }
+
+    @Test
+    fun `GET a non existing short url returns 404`() = testApplication {
+        // Given
+        val nonExistingShortURL = "nonexist"
+        // When
+        val response = client.get(nonExistingShortURL)
+
+        // Then
+        assertEquals(HttpStatusCode.NotFound, response.status)
+    }
 }
