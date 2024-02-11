@@ -14,6 +14,8 @@ make run
 make test
 ```
 
+These commands can be viewed in the `Makefile` for more details.
+
 ### API documentation
 
 The api is described in `src/main/resources/openapi/documentation.yaml`.
