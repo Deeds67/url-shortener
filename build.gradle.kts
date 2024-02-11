@@ -2,6 +2,7 @@
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
+val hoplite_version: String by project
 val mockk_version: String by project
 
 plugins {
@@ -33,6 +34,10 @@ dependencies {
     implementation("io.ktor:ktor-server-host-common-jvm")
     implementation("io.ktor:ktor-server-status-pages-jvm")
     implementation("io.ktor:ktor-server-netty-jvm")
+
+    implementation("com.sksamuel.hoplite:hoplite-core:$hoplite_version")
+    implementation("com.sksamuel.hoplite:hoplite-hocon:$hoplite_version")
+
     implementation("ch.qos.logback:logback-classic:$logback_version")
     testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
