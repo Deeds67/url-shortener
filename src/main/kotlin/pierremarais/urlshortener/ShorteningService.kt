@@ -9,7 +9,8 @@ interface ShorteningService {
 class ShorteningServiceImpl(private val shorteningStrategy: ShorteningStrategy,
                             private val repository: ShortenedURLRepository,): ShorteningService {
     override fun shorten(url: String): ShortenResult {
-        throw Exception("Not implemented")
+        repository.findByOriginalURL(url)?.let { return ShortenResult(it.shortURL, created = false) }
+        return ShortenResult(shorteningStrategy.shorten(url), created = true)
     }
 
     override fun getOriginalURL(shortURL: String): String? {
