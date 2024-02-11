@@ -21,5 +21,5 @@ fun Application.module() {
 
     configureMonitoring()
     configureHTTP()
-    configureRouting(shorteningService)
+    configureRouting(shorteningService, baseURL = config.routing.base)
 }

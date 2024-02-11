@@ -11,7 +11,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import pierremarais.urlshortener.ShorteningService
 
-fun Application.configureRouting(shorteningService: ShorteningService, linkPrefix: String = "http://localhost:8080/") {
+fun Application.configureRouting(shorteningService: ShorteningService, baseURL: String) {
     install(ContentNegotiation) {
         jackson()
     }
@@ -26,7 +26,7 @@ fun Application.configureRouting(shorteningService: ShorteningService, linkPrefi
             data class ShorteningResponse(@JsonProperty("short_url") val shortUrl: String)
             val body = call.receive<ShorteningRequest>()
             val result = shorteningService.shorten(body.url)
-            val shortURLWithPrefix = linkPrefix + result.shortURL
+            val shortURLWithPrefix = baseURL + result.shortURL
 
             val statusCode = if (result.created) HttpStatusCode.Created else HttpStatusCode.OK
             call.response.status(statusCode)
