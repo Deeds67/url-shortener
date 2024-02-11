@@ -5,6 +5,8 @@ import pierremarais.urlshortener.Base58Strategy
 import pierremarais.urlshortener.InMemoryShortenedURLRepository
 import pierremarais.urlshortener.ShorteningServiceImpl
 import kotlin.test.assertEquals
+import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
 
 class ShorteningServiceTest {
     private val strategy = Base58Strategy()
@@ -23,5 +25,25 @@ class ShorteningServiceTest {
         // Then
         assert(shortURL.length <= 8)
         assertEquals(true, created)
+    }
+
+    @Test
+    fun `shortening similar urls should return different short urls`() {
+        // Given
+        val repository = InMemoryShortenedURLRepository()
+        val shorteningService = ShorteningServiceImpl(strategy, repository)
+
+        val url1 = "https://www.google.com/1"
+        val url2 = "https://www.google.com/2"
+        // When
+        val result1 = shorteningService.shorten(url1)
+        val result2 = shorteningService.shorten(url2)
+
+        val shortURL1 = result1.shortURL
+        val shortURL2 = result2.shortURL
+        // Then
+        assertNotEquals(shortURL1, shortURL2)
+        assertTrue { result1.created }
+        assertTrue { result2.created }
     }
 }
