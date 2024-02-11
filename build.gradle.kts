@@ -3,6 +3,8 @@ val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
 val hoplite_version: String by project
+val exposed_version: String by project
+val postgresql_version: String by project
 val mockk_version: String by project
 
 plugins {
@@ -37,6 +39,11 @@ dependencies {
 
     implementation("com.sksamuel.hoplite:hoplite-core:$hoplite_version")
     implementation("com.sksamuel.hoplite:hoplite-hocon:$hoplite_version")
+
+    implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
+
+    runtimeOnly("org.postgresql:postgresql:$postgresql_version")
 
     implementation("ch.qos.logback:logback-classic:$logback_version")
     testImplementation("io.ktor:ktor-server-tests-jvm")
