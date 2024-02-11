@@ -10,6 +10,7 @@ val mockk_version: String by project
 plugins {
     kotlin("jvm") version "1.9.22"
     id("io.ktor.plugin") version "2.3.7"
+    id("org.flywaydb.flyway") version "8.5.12"
 }
 
 group = "pierremarais"
@@ -20,6 +21,21 @@ application {
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
+}
+
+fun getFromEnv(value: String): String? = emptyStringToNull(System.getenv(value))
+fun emptyStringToNull(value: String?): String? = if (value?.trim()?.isEmpty() != false) null else value
+
+flyway {
+    val dbURL = getFromEnv("DATABASE_HOST") ?: "localhost"
+    val dbUser = getFromEnv("DATABASE_USER") ?: "postgres"
+    val dbPassword = getFromEnv("DATABASE_PASSWORD") ?: "postgres"
+    val dbName = getFromEnv("DATABASE_NAME") ?: "postgres"
+    val dbPort = getFromEnv("DATABASE_PORT") ?: "5432"
+
+    url = "jdbc:postgresql://$dbURL:$dbPort/$dbName"
+    user = dbUser
+    password = dbPassword
 }
 
 repositories {
