@@ -27,7 +27,6 @@ class ShorteningServiceImpl(private val shorteningStrategy: ShorteningStrategy,
         throw Exception("Failed to generate a unique shortened URL after $maxRetries retries.")
     }
 
-    override fun getOriginalURL(shortURL: String): String? {
-        throw Exception("Not implemented")
-    }
+    override fun getOriginalURL(shortURL: String): String? =
+        repository.findByShortenedURL(shortURL)?.let { return it.originalURL }
 }

@@ -62,10 +62,15 @@ class ShorteningServiceTest {
 
         val shortURL1 = result1.shortURL
         val shortURL2 = result2.shortURL
+
+        val url1FromShort = shorteningService.getOriginalURL(shortURL1)
+        val url2FromShort = shorteningService.getOriginalURL(shortURL2)
         // Then
         assertEquals(shortURL1, shortURL2)
         assertTrue { result1.created }
         assertFalse { result2.created }
+        assertEquals(url1, url1FromShort)
+        assertEquals(url2, url2FromShort)
     }
 
     @Test

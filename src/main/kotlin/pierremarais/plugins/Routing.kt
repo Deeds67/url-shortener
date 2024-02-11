@@ -33,5 +33,18 @@ fun Application.configureRouting(shorteningService: ShorteningService, linkPrefi
 
             call.respond(ShorteningResponse(shortURLWithPrefix))
         }
+
+        get("/{short-url}"){
+            val shortURL = call.parameters["short-url"] ?: throw IllegalArgumentException("Missing short-url parameter")
+            println("inside short url route")
+            val originalURL = shorteningService.getOriginalURL(shortURL)
+            println("original: $originalURL")
+            if (originalURL != null) {
+                println("responding with originalURL $originalURL")
+                call.respondRedirect(originalURL)
+            } else {
+                call.respondText("404: Not Found", status = HttpStatusCode.NotFound)
+            }
+        }
     }
 }
