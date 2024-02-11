@@ -6,6 +6,6 @@ interface ShorteningStrategy {
 
 class Base58Strategy: ShorteningStrategy {
     override fun shorten(value: String): String {
-        TODO("Not yet implemented")
+        return value.take(8)
     }
 }
