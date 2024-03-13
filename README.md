@@ -1,4 +1,4 @@
-# URL Shortener by Pierre Marais
+# URL Shortener
 
 This is a simple URL shortener that hashes URLs using MD5, then encodes the hash with base58. The encoded string is reduced to max 8 characters. The task was to develop a solution within 3 hours.
 
